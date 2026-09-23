@@ -5,6 +5,7 @@
 /* ---------------- Real client data ---------------- */
 const BERDA_TESTIMONIALS = [
   {
+    category: "web",
     stars: 5,
     name: "Branton",
     business: "Driven By Jada",
@@ -16,6 +17,7 @@ const BERDA_TESTIMONIALS = [
     link: "", linkEnabled: false
   },
   {
+    category: "web",
     stars: 5,
     name: "Ziad",
     business: "LexStone Epoxy",
@@ -25,9 +27,62 @@ const BERDA_TESTIMONIALS = [
     image: "assets/lexstone-website-screenshot.jpg", imageEnabled: true,
     audio: "", audioEnabled: false,
     video: "", videoEnabled: false,
+    link: "https://lexstonechem.com", linkEnabled: true
+  },
+  {
+    category: "web",
+    stars: 5,
+    name: "Cristian",
+    business: "Top Dawg Detailing",
+    photo: "assets/topdawg-logo.png",
+    quote: "I am very pleased with how the website turned out and communication is on point. His hosting is very reliable and he is constantly updating my site.",
+    quoteEnabled: true,
+    image: "assets/topdawg-website-screenshot.jpg", imageEnabled: true,
+    audio: "", audioEnabled: false,
+    video: "", videoEnabled: false,
+    link: "https://topdawgdetailing.net", linkEnabled: true
+  },
+  {
+    category: "web",
+    stars: 5,
+    name: "Seif",
+    business: "Align Trading",
+    photo: "assets/align-trading-logo.png",
+    quote: "Berda Marketing did a great job with building my website, I highly recommend them!",
+    quoteEnabled: true,
+    image: "assets/align-trading-website-screenshot.jpg", imageEnabled: true,
+    audio: "", audioEnabled: false,
+    video: "", videoEnabled: false,
     link: "", linkEnabled: false
   },
   {
+    category: "web",
+    stars: 5,
+    name: "Alfredo",
+    business: "Sagaz Dental",
+    photo: "assets/sagaz-dental-logo.png",
+    quote: "Absolutely outstanding experience. They transformed our website into something modern, fast, and conversion-focused. Communication was clear and the results exceeded expectations. Highly recommend!",
+    quoteEnabled: true,
+    image: "assets/sagaz-dental-website-screenshot.jpg", imageEnabled: true,
+    audio: "", audioEnabled: false,
+    video: "", videoEnabled: false,
+    link: "", linkEnabled: false
+  },
+  {
+    category: "web",
+    stars: 5,
+    name: "Brayden",
+    business: "Krazy Duck Customs",
+    photo: "assets/krazy-duck-logo.jpg",
+    quote: "Best I ever seen do a website. I am so honored for his help.",
+    quoteEnabled: true,
+    image: "assets/krazy-duck-website-screenshot.jpg", imageEnabled: true,
+    audio: "", audioEnabled: false,
+    video: "", videoEnabled: false,
+    link: "", linkEnabled: false
+  },
+  {
+    category: "ads",
     stars: 5,
     name: "Ali",
     business: "Zephyr Customz",
@@ -40,6 +95,7 @@ const BERDA_TESTIMONIALS = [
     link: "", linkEnabled: false
   },
   {
+    category: "ads",
     stars: 5,
     name: "Thomas",
     business: "Detail Pros",
@@ -91,98 +147,76 @@ function berdaInitNav() {
   });
 }
 
-/* ---------------- Testimonial carousel (index.html) ---------------- */
-function berdaInitTestimonials() {
-  const wrap = document.querySelector('[data-testimonial-carousel]');
-  if (!wrap) return;
+/* ---------------- Testimonials grid (testimonials.html) ---------------- */
+function berdaTestimonialInitials(name) {
+  return (name || '').split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase();
+}
 
-  const data = BERDA_TESTIMONIALS;
-  const contentEl = wrap.querySelector('.testimonial-content');
-  const starsEl = wrap.querySelector('.stars');
-  const nameEl = wrap.querySelector('.author-name');
-  const businessEl = wrap.querySelector('.author-business');
-  const avatarEl = wrap.querySelector('.avatar-circle');
-  const dotsWrap = wrap.querySelector('.carousel-dots');
-  const prevBtn = wrap.querySelector('.carousel-arrow.prev');
-  const nextBtn = wrap.querySelector('.carousel-arrow.next');
+function berdaEscapeAttr(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
 
-  let current = 0;
+function berdaRenderTestimonialCard(item, delayIndex) {
+  const starCount = parseInt(item.stars, 10) || 5;
+  const stars = '★'.repeat(starCount) + '☆'.repeat(Math.max(0, 5 - starCount));
 
-  function initials(name) {
-    return (name || '').split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase();
+  let content = '';
+  if (item.imageEnabled && item.image) {
+    content += '<img src="' + item.image + '" alt="Testimonial from ' + berdaEscapeAttr(item.name) + '" class="testimonial-content-image">';
+  }
+  if (item.videoEnabled && item.video) {
+    content += '<video controls src="' + item.video + '" class="testimonial-content-video"></video>';
+  }
+  if (item.quoteEnabled && item.quote) {
+    content += '<p class="testimonial-quote">"' + berdaEscapeAttr(item.quote) + '"</p>';
+  }
+  if (item.audioEnabled && item.audio) {
+    content += '<audio controls src="' + item.audio + '" class="testimonial-audio"></audio>';
+  }
+  if (item.linkEnabled && item.link) {
+    content += '<a href="' + item.link + '" target="_blank" rel="noopener" class="btn btn-outline testimonial-link-btn">View Testimonial</a>';
   }
 
-  function escapeAttr(str) {
-    return String(str || '')
-      .replace(/&/g, '&amp;')
-      .replace(/"/g, '&quot;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+  const avatar = item.photo
+    ? '<img src="' + item.photo + '" alt="' + berdaEscapeAttr(item.name) + '">'
+    : berdaTestimonialInitials(item.name);
+
+  return '' +
+    '<div class="testimonial-card reveal" style="--reveal-delay: ' + (delayIndex * 0.1) + 's">' +
+      '<div class="stars">' + stars + '</div>' +
+      '<div class="testimonial-content">' + content + '</div>' +
+      '<div class="testimonial-author">' +
+        '<div class="avatar-circle">' + avatar + '</div>' +
+        '<div class="author-info">' +
+          '<div class="author-name">' + berdaEscapeAttr(item.name) + '</div>' +
+          '<div class="author-business">' + berdaEscapeAttr(item.business) + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+}
+
+function berdaInitTestimonialsGrid() {
+  const adsGrid = document.querySelector('[data-testimonials-grid="ads"]');
+  const webGrid = document.querySelector('[data-testimonials-grid="web"]');
+  if (!adsGrid && !webGrid) return;
+
+  if (adsGrid) {
+    adsGrid.innerHTML = BERDA_TESTIMONIALS
+      .filter((t) => t.category === 'ads')
+      .map((t, i) => berdaRenderTestimonialCard(t, i))
+      .join('');
   }
 
-  function render() {
-    const item = data[current];
-    const starCount = parseInt(item.stars, 10) || 5;
-    starsEl.textContent = '★'.repeat(starCount) + '☆'.repeat(Math.max(0, 5 - starCount));
-
-    let html = '';
-    if (item.quoteEnabled && item.quote) {
-      html += '<p class="testimonial-quote">"' + escapeAttr(item.quote) + '"</p>';
-    }
-    if (item.imageEnabled && item.image) {
-      html += '<img src="' + item.image + '" alt="Testimonial from ' + escapeAttr(item.name) + '" class="testimonial-content-image">';
-    }
-    if (item.videoEnabled && item.video) {
-      html += '<video controls src="' + item.video + '" class="testimonial-content-video"></video>';
-    }
-    if (item.audioEnabled && item.audio) {
-      html += '<audio controls src="' + item.audio + '" class="testimonial-audio"></audio>';
-    }
-    if (item.linkEnabled && item.link) {
-      html += '<a href="' + item.link + '" target="_blank" rel="noopener" class="btn btn-outline testimonial-link-btn">View Testimonial</a>';
-    }
-    contentEl.innerHTML = html;
-
-    nameEl.textContent = item.name;
-    businessEl.textContent = item.business;
-
-    if (item.photo) {
-      avatarEl.innerHTML = '<img src="' + item.photo + '" alt="' + escapeAttr(item.name) + '">';
-    } else {
-      avatarEl.textContent = initials(item.name);
-    }
-
-    dotsWrap.querySelectorAll('.carousel-dot').forEach((dot, i) => {
-      dot.classList.toggle('active', i === current);
-    });
+  if (webGrid) {
+    webGrid.innerHTML = BERDA_TESTIMONIALS
+      .filter((t) => t.category === 'web')
+      .map((t, i) => berdaRenderTestimonialCard(t, i))
+      .join('');
   }
-
-  function buildDots() {
-    dotsWrap.innerHTML = '';
-    data.forEach((_, i) => {
-      const dot = document.createElement('button');
-      dot.className = 'carousel-dot';
-      dot.setAttribute('aria-label', 'Go to testimonial ' + (i + 1));
-      dot.addEventListener('click', () => {
-        current = i;
-        render();
-      });
-      dotsWrap.appendChild(dot);
-    });
-  }
-
-  prevBtn.addEventListener('click', () => {
-    current = (current - 1 + data.length) % data.length;
-    render();
-  });
-
-  nextBtn.addEventListener('click', () => {
-    current = (current + 1) % data.length;
-    render();
-  });
-
-  buildDots();
-  render();
 }
 
 /* ---------------- Real Results (index.html) ---------------- */
@@ -316,7 +350,7 @@ function berdaInitScrollReveal() {
 document.addEventListener('DOMContentLoaded', () => {
   berdaInitNav();
   berdaInitResults();
-  berdaInitTestimonials();
+  berdaInitTestimonialsGrid();
   berdaInitServiceCards();
   berdaInitScrollReveal();
   berdaInitCountUp();
