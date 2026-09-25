@@ -50,7 +50,9 @@
 
 <!-- ================= HERO ================= -->
 <section class="hero">
-  <div class="hero-glow-orb"></div>
+  <div class="hero-glow-orb">
+    <div class="hero-glow-orb-bg"></div>
+  </div>
   <div class="hero-content">
     <h1 class="reveal">Get More Clients For Your Service Business</h1>
     <p class="reveal" style="--reveal-delay: 0.1s">Proven Meta and Google Ads lead generation strategies, combined with social media management, that deliver real results for local service businesses.</p>
@@ -68,14 +70,16 @@
         <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
       </linearGradient>
       <filter id="heroWaveGlow" x="-20%" y="-300%" width="140%" height="700%">
-        <feGaussianBlur stdDeviation="6" result="blur"/>
+        <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="haloBlur"/>
+        <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="coreBlur"/>
         <feMerge>
-          <feMergeNode in="blur"/>
+          <feMergeNode in="haloBlur"/>
+          <feMergeNode in="coreBlur"/>
           <feMergeNode in="SourceGraphic"/>
         </feMerge>
       </filter>
     </defs>
-    <path d="M0,65 C260,25 500,95 800,55 C1100,15 1340,80 1600,45" fill="none" stroke="url(#heroWaveFade)" stroke-width="2.5" filter="url(#heroWaveGlow)"/>
+    <path class="hero-wave-path" d="M0,65 C260,25 500,95 800,55 C1100,15 1340,80 1600,45" fill="none" stroke="url(#heroWaveFade)" stroke-width="3" filter="url(#heroWaveGlow)"/>
   </svg>
 </section>
 
