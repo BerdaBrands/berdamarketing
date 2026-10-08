@@ -7,31 +7,6 @@ const BERDA_TESTIMONIALS = [
   {
     category: "web",
     stars: 5,
-    name: "Branton",
-    business: "Driven By Jada",
-    photo: "assets/driven-by-jada-logo.jpg",
-    quote: "", quoteEnabled: false,
-    image: "assets/driven-by-jada-website-screenshot.jpg", imageEnabled: true,
-    audio: "assets/branton-testimonial-audio.m4a", audioEnabled: true,
-    video: "", videoEnabled: false,
-    link: "", linkEnabled: false
-  },
-  {
-    category: "web",
-    stars: 5,
-    name: "Ziad",
-    business: "LexStone Epoxy",
-    photo: "assets/lexstone-logo.png",
-    quote: "I am very pleased with the website development service provided. The work was handled professionally, with great attention to detail and a clear understanding of our requirements.",
-    quoteEnabled: true,
-    image: "assets/lexstone-website-screenshot.jpg", imageEnabled: true,
-    audio: "", audioEnabled: false,
-    video: "", videoEnabled: false,
-    link: "https://lexstonechem.com", linkEnabled: true
-  },
-  {
-    category: "web",
-    stars: 5,
     name: "Cristian",
     business: "Top Dawg Detailing",
     photo: "assets/topdawg-logo.png",
@@ -65,6 +40,31 @@ const BERDA_TESTIMONIALS = [
     audio: "", audioEnabled: false,
     video: "", videoEnabled: false,
     link: "https://wallingtreefarm.com", linkEnabled: true
+  },
+  {
+    category: "web",
+    stars: 5,
+    name: "Branton",
+    business: "Driven By Jada",
+    photo: "assets/driven-by-jada-logo.jpg",
+    quote: "", quoteEnabled: false,
+    image: "assets/driven-by-jada-website-screenshot.jpg", imageEnabled: true,
+    audio: "assets/branton-testimonial-audio.m4a", audioEnabled: true,
+    video: "", videoEnabled: false,
+    link: "", linkEnabled: false
+  },
+  {
+    category: "web",
+    stars: 5,
+    name: "Ziad",
+    business: "LexStone Epoxy",
+    photo: "assets/lexstone-logo.png",
+    quote: "I am very pleased with the website development service provided. The work was handled professionally, with great attention to detail and a clear understanding of our requirements.",
+    quoteEnabled: true,
+    image: "assets/lexstone-website-screenshot.jpg", imageEnabled: true,
+    audio: "", audioEnabled: false,
+    video: "", videoEnabled: false,
+    link: "https://lexstonechem.com", linkEnabled: true
   },
   {
     category: "web",
