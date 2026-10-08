@@ -45,41 +45,38 @@ const BERDA_TESTIMONIALS = [
   {
     category: "web",
     stars: 5,
-    name: "Seif",
-    business: "Align Trading",
-    photo: "assets/align-trading-logo.png",
-    quote: "Berda Marketing did a great job with building my website, I highly recommend them!",
-    quoteEnabled: true,
-    image: "assets/align-trading-website-screenshot.jpg", imageEnabled: true,
+    name: "Alexander",
+    business: "Alexander The Great Detailing",
+    photo: "assets/alexander-logo.jpg",
+    quote: "", quoteEnabled: false,
+    image: "assets/alexander-website-screenshot.jpg", imageEnabled: true,
     audio: "", audioEnabled: false,
     video: "", videoEnabled: false,
-    link: "", linkEnabled: false
+    link: "https://alexanderthegreatdetailing.com", linkEnabled: true
   },
   {
     category: "web",
     stars: 5,
-    name: "Alfredo",
-    business: "Sagaz Dental",
-    photo: "assets/sagaz-dental-logo.png",
-    quote: "Absolutely outstanding experience. They transformed our website into something modern, fast, and conversion-focused. Communication was clear and the results exceeded expectations. Highly recommend!",
-    quoteEnabled: true,
-    image: "assets/sagaz-dental-website-screenshot.jpg", imageEnabled: true,
+    name: "Jessica",
+    business: "Walling Tree Farm",
+    photo: "assets/walling-tree-farm-logo.jpg",
+    quote: "", quoteEnabled: false,
+    image: "assets/walling-tree-farm-website-screenshot.jpg", imageEnabled: true,
     audio: "", audioEnabled: false,
     video: "", videoEnabled: false,
-    link: "", linkEnabled: false
+    link: "https://wallingtreefarm.com", linkEnabled: true
   },
   {
     category: "web",
     stars: 5,
-    name: "Brayden",
-    business: "Krazy Duck Customs",
-    photo: "assets/krazy-duck-logo.jpg",
-    quote: "Best I ever seen do a website. I am so honored for his help.",
-    quoteEnabled: true,
-    image: "assets/krazy-duck-website-screenshot.jpg", imageEnabled: true,
+    name: "Nemanja",
+    business: "Big Bite",
+    photo: "assets/big-bite-logo.jpg",
+    quote: "", quoteEnabled: false,
+    image: "assets/big-bite-website-screenshot.jpg", imageEnabled: true,
     audio: "", audioEnabled: false,
     video: "", videoEnabled: false,
-    link: "", linkEnabled: false
+    link: "https://big-bite.site", linkEnabled: true
   },
   {
     category: "ads",
@@ -165,8 +162,9 @@ function berdaRenderTestimonialCard(item, delayIndex) {
   const stars = '★'.repeat(starCount) + '☆'.repeat(Math.max(0, 5 - starCount));
 
   let content = '';
+  let imageHtml = '';
   if (item.imageEnabled && item.image) {
-    content += '<img src="' + item.image + '" alt="Testimonial from ' + berdaEscapeAttr(item.name) + '" class="testimonial-content-image">';
+    imageHtml = '<img src="' + item.image + '" alt="' + berdaEscapeAttr(item.business) + ' website" class="testimonial-content-image" loading="lazy">';
   }
   if (item.videoEnabled && item.video) {
     content += '<video controls src="' + item.video + '" class="testimonial-content-video"></video>';
@@ -178,7 +176,7 @@ function berdaRenderTestimonialCard(item, delayIndex) {
     content += '<audio controls src="' + item.audio + '" class="testimonial-audio"></audio>';
   }
   if (item.linkEnabled && item.link) {
-    content += '<a href="' + item.link + '" target="_blank" rel="noopener" class="btn btn-outline testimonial-link-btn">View Testimonial</a>';
+    content += '<a href="' + item.link + '" target="_blank" rel="noopener" class="btn btn-outline testimonial-link-btn">Visit Website &rarr;</a>';
   }
 
   const avatar = item.photo
@@ -187,6 +185,7 @@ function berdaRenderTestimonialCard(item, delayIndex) {
 
   return '' +
     '<div class="testimonial-card reveal" style="--reveal-delay: ' + (delayIndex * 0.1) + 's">' +
+      imageHtml +
       '<div class="stars">' + stars + '</div>' +
       '<div class="testimonial-content">' + content + '</div>' +
       '<div class="testimonial-author">' +
@@ -199,24 +198,47 @@ function berdaRenderTestimonialCard(item, delayIndex) {
     '</div>';
 }
 
+const BERDA_TESTIMONIALS_PER_ROW = 3;
+
+function berdaFillTestimonialGrid(grid, category) {
+  const items = BERDA_TESTIMONIALS.filter((t) => t.category === category);
+  grid.innerHTML = items
+    .map((t, i) => berdaRenderTestimonialCard(t, i % BERDA_TESTIMONIALS_PER_ROW))
+    .join('');
+
+  if (items.length <= BERDA_TESTIMONIALS_PER_ROW) return;
+
+  const cards = grid.querySelectorAll('.testimonial-card');
+  cards.forEach((card, i) => {
+    if (i >= BERDA_TESTIMONIALS_PER_ROW) card.classList.add('is-extra', 'is-collapsed');
+  });
+
+  const wrap = document.createElement('div');
+  wrap.className = 'testimonials-more';
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'btn btn-outline';
+  btn.textContent = 'View More';
+  btn.setAttribute('aria-expanded', 'false');
+  wrap.appendChild(btn);
+  grid.insertAdjacentElement('afterend', wrap);
+
+  btn.addEventListener('click', () => {
+    const expanding = btn.getAttribute('aria-expanded') === 'false';
+    btn.setAttribute('aria-expanded', String(expanding));
+    btn.textContent = expanding ? 'Show Less' : 'View More';
+    grid.querySelectorAll('.is-extra').forEach((card) => {
+      card.classList.toggle('is-collapsed', !expanding);
+      if (expanding) card.classList.add('visible');
+    });
+  });
+}
+
 function berdaInitTestimonialsGrid() {
   const adsGrid = document.querySelector('[data-testimonials-grid="ads"]');
   const webGrid = document.querySelector('[data-testimonials-grid="web"]');
-  if (!adsGrid && !webGrid) return;
-
-  if (adsGrid) {
-    adsGrid.innerHTML = BERDA_TESTIMONIALS
-      .filter((t) => t.category === 'ads')
-      .map((t, i) => berdaRenderTestimonialCard(t, i))
-      .join('');
-  }
-
-  if (webGrid) {
-    webGrid.innerHTML = BERDA_TESTIMONIALS
-      .filter((t) => t.category === 'web')
-      .map((t, i) => berdaRenderTestimonialCard(t, i))
-      .join('');
-  }
+  if (adsGrid) berdaFillTestimonialGrid(adsGrid, 'ads');
+  if (webGrid) berdaFillTestimonialGrid(webGrid, 'web');
 }
 
 /* ---------------- Real Results (index.html) ---------------- */
