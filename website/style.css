@@ -157,8 +157,19 @@ section {
 
 .logo-img {
   height: 42px;
-  width: auto;
+  width: 42px;
   display: block;
+  border-radius: 8px;
+}
+
+.logo:focus {
+  outline: none;
+}
+
+.logo:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 8px;
 }
 
 .logo-text {
